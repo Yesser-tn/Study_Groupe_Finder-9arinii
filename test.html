@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9arrini - Find Your Study Partner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00BFA5;
+            --secondary-color: #4A90E2;
+            --background-color: #F5F7FA;
+            --text-color: #2C3E50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+        }
+
+        .navbar {
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tool-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .feature-section {
+            padding: 4rem 0;
+            background: white;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .feature-card img {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 1rem;
+        }
+
+        /* Dropdown Styling */
+        .study-tools-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            width: 150px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            visibility: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .study-tools-container:hover .dropdown {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+        }
+
+        .dropdown li {
+            padding: 10px 15px;
+        }
+
+        .dropdown li a {
+            text-decoration: none;
+            color: black;
+            display: block;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .dropdown li a:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="#">
+                <img src="output-onlinepngtools.png" alt="9arrini Logo" width="200" height="120">
+            </a>
+            <div class="nav-links">
+                <a href="#">Find Partners</a>
+                
+                <div class="study-tools-container">
+                    <a href="#">Study Tools</a>
+                    <ul class="dropdown">
+                        <li><a href="#">Pomodoro Timer</a></li>
+                        <li><a href="#">Task Schedule</a></li>
+                        <li><a href="#">Quiz Creator</a></li>
+                        <li><a href="#">To-Do List</a></li>
+                    </ul>
+                </div>
+
+                <a href="#">Messages</a>
+                <a href="login.html" class="btn btn-primary">Login/Signin</a>
+            </div>
+        </div>
+    </nav>
+    <main class="main-content">
+        <div class="container">
+            <section class="hero">
+                <h1>Find Your Perfect Study Partner</h1>
+                <p>Connect with students who share your academic interests and goals</p>
+                <a href="login.html" class="btn btn-primary">Get Started</a>
+            </section>
+            
+            <section class="tools-grid">
+                <div class="tool-card">
+                    <h3>Pomodoro Timer</h3>
+                    <p>Stay focused with timed study sessions</p>
+                </div>
+                <div class="tool-card">
+                    <h3>Flashcards</h3>
+                    <p>Create and study with digital flashcards</p>
+                </div>
+                <div class="tool-card">
+                    <h3>Quiz Creator</h3>
+                    <p>Test your knowledge with custom quizzes</p>
+                </div>
+                <div class="tool-card">
+                    <h3>To-Do List</h3>
+                    <p>Track your tasks and assignments</p>
+                </div>
+            </section>
+            
+            <section class="feature-section">
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <img src="match.png" alt="Match icon">
+                        <h3>Smart Matching</h3>
+                        <p>Find study partners based on your subjects and schedule</p>
+                    </div>
+                    <div class="feature-card">
+                        <img src="chat.png" alt="Chat icon">
+                        <h3>Real-time Chat</h3>
+                        <p>Communicate easily with your study partners</p>
+                    </div>
+                    <div class="feature-card">
+                        <img src="todo.png" alt="Tools icon">
+                        <h3>Study Tools</h3>
+                        <p>Access productivity tools to enhance your learning</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>
