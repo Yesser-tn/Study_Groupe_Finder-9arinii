@@ -1,0 +1,377 @@
+<div class="tool-card">
+    <div id="quiz-manager">
+        <!-- Quiz List -->
+        <div class="quiz-list-container">
+            <h3>Your Quizzes</h3>
+            <div id="quiz-list"></div>
+            <button id="add-quiz-btn" class="primary-btn">Create New Quiz</button>
+        </div>
+
+        <!-- Quiz Creator -->
+        <div id="quiz-creator" class="hidden">
+            <div class="quiz-creator-header">
+                <h3>Create Quiz</h3>
+                <input type="text" id="quiz-title" placeholder="Quiz Title" class="full-width">
+            </div>
+            <div id="questions-container"></div>
+            <div class="quiz-creator-actions">
+                <button id="add-question-btn">Add Question</button>
+                <button id="save-quiz-btn" class="primary-btn">Save Quiz</button>
+                <button id="cancel-quiz-btn">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Quiz Player -->
+        <div id="quiz-player" class="hidden">
+            <div class="quiz-player-header">
+                <h3 id="current-quiz-title"></h3>
+                <div id="quiz-progress"></div>
+            </div>
+            <div id="current-question"></div>
+            <div class="quiz-player-actions">
+                <button id="next-question-btn" class="primary-btn">Next Question</button>
+                <button id="finish-quiz-btn" class="primary-btn hidden">Finish Quiz</button>
+                <button id="exit-quiz-btn">Exit Quiz</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hidden {
+    display: none !important;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.primary-btn {
+    background-color: #00BFA5;
+    color: white;
+}
+
+/* Quiz List Styles */
+.quiz-list-container {
+    margin-bottom: 20px;
+}
+
+.quiz-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0;
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+/* Quiz Creator Styles */
+.quiz-creator-header {
+    margin-bottom: 20px;
+}
+
+.question-container {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.option-container {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.option-container input[type="text"] {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.quiz-creator-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Quiz Player Styles */
+.quiz-player-header {
+    margin-bottom: 20px;
+}
+
+#quiz-progress {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.option-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    text-align: left;
+    background: #f5f5f5;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.option-button:hover {
+    background: #e0e0e0;
+}
+
+.option-button.selected {
+    background: #00BFA5;
+    color: white;
+}
+
+.quiz-player-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.result-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.result-score {
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+
+input[type="text"], input[type="radio"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 5px 0;
+}
+
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+</style>
+
+<script>
+// Quiz Manager State
+let quizzes = [];
+let currentQuiz = null;
+let currentQuestionIndex = 0;
+let userAnswers = [];
+
+// DOM Elements
+const quizManager = document.getElementById('quiz-manager');
+const quizList = document.getElementById('quiz-list');
+const quizCreator = document.getElementById('quiz-creator');
+const quizPlayer = document.getElementById('quiz-player');
+const questionsContainer = document.getElementById('questions-container');
+
+// Initialize Event Listeners
+document.getElementById('add-quiz-btn').addEventListener('click', showQuizCreator);
+document.getElementById('add-question-btn').addEventListener('click', addQuestionField);
+document.getElementById('save-quiz-btn').addEventListener('click', saveQuiz);
+document.getElementById('cancel-quiz-btn').addEventListener('click', cancelQuizCreation);
+document.getElementById('next-question-btn').addEventListener('click', nextQuestion);
+document.getElementById('finish-quiz-btn').addEventListener('click', showQuizResults);
+document.getElementById('exit-quiz-btn').addEventListener('click', exitQuiz);
+
+// Quiz Creation Functions
+function showQuizCreator() {
+    quizList.parentElement.classList.add('hidden');
+    quizCreator.classList.remove('hidden');
+    quizPlayer.classList.add('hidden');
+    document.getElementById('quiz-title').value = '';
+    questionsContainer.innerHTML = '';
+    addQuestionField();
+}
+
+function addQuestionField() {
+    const questionDiv = document.createElement('div');
+    questionDiv.className = 'question-container';
+    const questionId = Date.now();
+    
+    questionDiv.innerHTML = `
+        <div class="question-header">
+            <input type="text" class="question-text full-width" placeholder="Enter question">
+            <button onclick="removeQuestion(this)" class="remove-btn">×</button>
+        </div>
+        <div class="options-container">
+            ${[1, 2, 3, 4].map(i => `
+                <div class="option-container">
+                    <input type="radio" name="correct-${questionId}" value="${i-1}">
+                    <input type="text" class="option-text" placeholder="Option ${i}">
+                </div>
+            `).join('')}
+        </div>
+    `;
+    
+    questionsContainer.appendChild(questionDiv);
+}
+
+function removeQuestion(button) {
+    button.closest('.question-container').remove();
+}
+
+function saveQuiz() {
+    const title = document.getElementById('quiz-title').value.trim();
+    if (!title) {
+        alert('Please enter a quiz title');
+        return;
+    }
+
+    const questions = [];
+    const questionContainers = questionsContainer.getElementsByClassName('question-container');
+    
+    for (let container of questionContainers) {
+        const questionText = container.querySelector('.question-text').value.trim();
+        const options = Array.from(container.getElementsByClassName('option-text'))
+            .map(input => input.value.trim());
+        const correctAnswer = container.querySelector('input[type="radio"]:checked');
+
+        if (!questionText || options.some(opt => !opt) || !correctAnswer) {
+            alert('Please fill all fields and select correct answers');
+            return;
+        }
+
+        questions.push({
+            question: questionText,
+            options: options,
+            correct: parseInt(correctAnswer.value)
+        });
+    }
+
+    const quiz = {
+        id: Date.now(),
+        title: title,
+        questions: questions
+    };
+
+    quizzes.push(quiz);
+    updateQuizList();
+    cancelQuizCreation();
+}
+
+function cancelQuizCreation() {
+    quizCreator.classList.add('hidden');
+    quizList.parentElement.classList.remove('hidden');
+}
+
+// Quiz List Functions
+function updateQuizList() {
+    quizList.innerHTML = quizzes.map(quiz => `
+        <div class="quiz-item">
+            <span>${quiz.title} (${quiz.questions.length} questions)</span>
+            <div>
+                <button onclick="startQuiz(${quiz.id})">Start</button>
+                <button onclick="deleteQuiz(${quiz.id})">Delete</button>
+            </div>
+        </div>
+    `).join('') || '<p>No quizzes created yet</p>';
+}
+
+function deleteQuiz(quizId) {
+    quizzes = quizzes.filter(quiz => quiz.id !== quizId);
+    updateQuizList();
+}
+
+// Quiz Player Functions
+function startQuiz(quizId) {
+    currentQuiz = quizzes.find(quiz => quiz.id === quizId);
+    currentQuestionIndex = 0;
+    userAnswers = [];
+    
+    quizList.parentElement.classList.add('hidden');
+    quizCreator.classList.add('hidden');
+    quizPlayer.classList.remove('hidden');
+    
+    document.getElementById('current-quiz-title').textContent = currentQuiz.title;
+    showCurrentQuestion();
+}
+
+function showCurrentQuestion() {
+    const question = currentQuiz.questions[currentQuestionIndex];
+    const progress = `Question ${currentQuestionIndex + 1} of ${currentQuiz.questions.length}`;
+    
+    document.getElementById('quiz-progress').textContent = progress;
+    document.getElementById('current-question').innerHTML = `
+        <h4 class="question-text">${question.question}</h4>
+        <div class="options-container">
+            ${question.options.map((option, index) => `
+                <button class="option-button" onclick="selectOption(${index})">${option}</button>
+            `).join('')}
+        </div>
+    `;
+
+    document.getElementById('next-question-btn').classList.toggle('hidden', 
+        currentQuestionIndex === currentQuiz.questions.length - 1);
+    document.getElementById('finish-quiz-btn').classList.toggle('hidden', 
+        currentQuestionIndex !== currentQuiz.questions.length - 1);
+}
+
+function selectOption(index) {
+    const buttons = document.getElementsByClassName('option-button');
+    Array.from(buttons).forEach(btn => btn.classList.remove('selected'));
+    buttons[index].classList.add('selected');
+    userAnswers[currentQuestionIndex] = index;
+}
+
+function nextQuestion() {
+    if (userAnswers[currentQuestionIndex] === undefined) {
+        alert('Please select an answer');
+        return;
+    }
+    currentQuestionIndex++;
+    showCurrentQuestion();
+}
+
+function showQuizResults() {
+    if (userAnswers[currentQuestionIndex] === undefined) {
+        alert('Please select an answer');
+        return;
+    }
+
+    const correctAnswers = userAnswers.filter((answer, index) => 
+        answer === currentQuiz.questions[index].correct
+    ).length;
+
+    const score = Math.round((correctAnswers / currentQuiz.questions.length) * 100);
+    
+    document.getElementById('current-question').innerHTML = `
+        <div class="result-container">
+            <h3>Quiz Complete!</h3>
+            <div class="result-score">Score: ${score}%</div>
+            <p>You got ${correctAnswers} out of ${currentQuiz.questions.length} questions correct</p>
+        </div>
+    `;
+
+    document.getElementById('next-question-btn').classList.add('hidden');
+    document.getElementById('finish-quiz-btn').classList.add('hidden');
+}
+
+function exitQuiz() {
+    quizPlayer.classList.add('hidden');
+    quizList.parentElement.classList.remove('hidden');
+}
+
+// Initialize quiz list
+updateQuizList();
+</script>
