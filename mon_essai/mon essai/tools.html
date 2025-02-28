@@ -116,22 +116,25 @@
 
         .chat-header {
             padding: 20px;
-            border-bottom: 1px solid #eee;
+            background: #00BFA5;
+            color: white;
             font-weight: 600;
-            color: #00BFA5;
+            text-align: center;
         }
 
         .chat-messages {
             flex-grow: 1;
             padding: 20px;
             overflow-y: auto;
+            max-height: 500px;
         }
 
         .chat-input-container {
-            padding: 20px;
+            padding: 15px;
             border-top: 1px solid #eee;
             display: flex;
             gap: 10px;
+            align-items: center;
         }
 
         #chat-input {
@@ -139,6 +142,15 @@
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 6px;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .file-label {
+            cursor: pointer;
+            font-size: 1.2em;
         }
 
         button {
@@ -165,16 +177,27 @@
             padding: 8px 12px;
             border-radius: 8px;
             max-width: 80%;
+            position: relative;
         }
 
         .message.sent {
             background: #00BFA5;
             color: white;
+            align-self: flex-end;
             margin-left: auto;
+            text-align: right;
         }
 
         .message.received {
             background: #f1f1f1;
+            align-self: flex-start;
+        }
+
+        .timestamp {
+            display: block;
+            font-size: 0.75em;
+            margin-top: 5px;
+            color: #666;
         }
 
         @media (max-width: 768px) {
@@ -221,7 +244,6 @@
                 <button onclick="window.location.href='quiz.html'">Create Quiz</button>
             </div>
 
-            
             <!-- Add Schedule Button -->
             <div class="tool-card">
                 <div class="tool-header">Today's Schedule</div>
@@ -234,15 +256,15 @@
             <div class="chat-header">Chat Room</div>
             <div class="chat-messages" id="chat-messages"></div>
             <div class="chat-input-container">
+                <input type="file" id="file-input">
+                <label for="file-input" class="file-label">📎</label>
                 <input type="text" id="chat-input" placeholder="Type a message...">
-                <button id="attachment-btn">📎</button>
                 <button id="send-btn">Send</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Previous JavaScript code remains the same
         // Todo List Functionality
         const todoInput = document.getElementById('todo-input');
         const todoList = document.getElementById('todo-list');
@@ -309,68 +331,22 @@
             startButton.textContent = 'Start';
         });
 
-        // Quiz Functionality
-        const quizContainer = document.getElementById('quiz-container');
-        const sampleQuiz = {
-            question: "What is the capital of France?",
-            options: ["London", "Berlin", "Paris", "Madrid"],
-            correct: 2
-        };
-
-        function loadQuiz() {
-            quizContainer.innerHTML = `
-                <div class="quiz-question">
-                    <p>${sampleQuiz.question}</p>
-                    <div class="quiz-options">
-                        ${sampleQuiz.options.map((option, index) => `
-                            <label>
-                                <input type="radio" name="quiz" value="${index}">
-                                ${option}
-                            </label>
-                        `).join('')}
-                    </div>
-                </div>
-                <button onclick="checkAnswer()">Submit Answer</button>
-            `;
-        }
-
-        function checkAnswer() {
-            const selected = document.querySelector('input[name="quiz"]:checked');
-            if (selected) {
-                if (parseInt(selected.value) === sampleQuiz.correct) {
-                    alert('Correct!');
-                } else {
-                    alert('Incorrect. Try again!');
-                }
-            }
-        }
-
-        // Schedule Functionality
-        const scheduleList = document.getElementById('schedule-list');
-        const sampleSchedule = [
-            { time: '09:00', activity: 'Study Mathematics' },
-            { time: '11:00', activity: 'Break' },
-            { time: '11:30', activity: 'Study Physics' },
-            { time: '13:00', activity: 'Lunch Break' }
-        ];
-
-        function loadSchedule() {
-            scheduleList.innerHTML = sampleSchedule.map(item => `
-                <div class="schedule-item">
-                    <strong>${item.time}</strong> - ${item.activity}
-                </div>
-            `).join('');
-        }
-
         // Chat Functionality
         const chatInput = document.getElementById('chat-input');
         const chatMessages = document.getElementById('chat-messages');
         const sendButton = document.getElementById('send-btn');
+        const fileInput = document.getElementById('file-input');
 
-        function sendMessage(text, isSent = true) {
+        function sendMessage(text, isFile = false) {
             const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isSent ? 'sent' : 'received'}`;
-            messageDiv.textContent = text;
+            messageDiv.className = 'message sent';
+            messageDiv.innerHTML = isFile ? `<a href="${text}" target="_blank">📎 File</a>` : text;
+            
+            const timestamp = document.createElement('span');
+            timestamp.className = 'timestamp';
+            timestamp.textContent = new Date().toLocaleTimeString();
+            messageDiv.appendChild(timestamp);
+            
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
@@ -390,9 +366,13 @@
             }
         });
 
-        // Initialize components
-        loadQuiz();
-        loadSchedule();
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const fileURL = URL.createObjectURL(file);
+                sendMessage(fileURL, true);
+            }
+        });
     </script>
 </body>
 </html>
