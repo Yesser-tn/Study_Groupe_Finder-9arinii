@@ -10,7 +10,9 @@
         :root {
             --primary-color: #00BFA5;
             --secondary-color: #4A90E2;
-            --gmail-red: #DB4437; /* Gmail red color */
+            --gmail-red: #EA4335;
+            --gmail-dark-red: #D93025;
+            --gmail-light-red: #FF5145;
             --background-color: #F5F7FA;
             --text-color: #2C3E50;
             --error-color: #FF5252;
@@ -32,7 +34,6 @@
             padding: 2rem;
         }
 
-        /* Animated background */
         .animated-bg {
             position: fixed;
             top: 0;
@@ -131,13 +132,13 @@
         .signup-form {
             transform: translateX(100%);
             opacity: 0;
-            display: none; /* Hide by default */
+            display: none;
         }
 
         .form.active {
             transform: translateX(0);
             opacity: 1;
-            display: block; /* Show when active */
+            display: block;
         }
 
         .input-group {
@@ -222,42 +223,56 @@
             text-align: center;
         }
 
+        /* Enhanced Gmail Button */
         .gmail-btn {
-            width: 100%; 
-            height: 40px;
-            border-radius: 20px;
-            background: var(--gmail-red);
+            width: 100%;
+            height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(to bottom, var(--gmail-light-red), var(--gmail-red));
             color: white;
-            font-size: 1rem;
-            font-weight: 500;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.2px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
-            opacity: 0; /* Start hidden */
-            transform: scale(0); /* Start scaled down */
-            animation: fadeInScale 0.5s forwards; /* Animation */
+            border: none;
+            box-shadow: 0 2px 8px rgba(234, 67, 53, 0.3);
+            opacity: 0;
+            transform: scale(0);
+            animation: fadeInScale 0.5s forwards;
         }
 
         .gmail-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(234, 67, 53, 0.4);
+            background: linear-gradient(to bottom, var(--gmail-light-red), var(--gmail-dark-red));
+        }
+
+        .gmail-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(234, 67, 53, 0.4);
         }
 
         .gmail-logo {
-            width: 20px; /* Adjust size as necessary */
-            margin-right: 8px; /* Space between logo and text */
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .gmail-text {
+            position: relative;
+            top: 1px;
         }
 
         .divider {
             margin: 2rem 0;
             text-align: center;
             position: relative;
-            /* Remove the line below */
-            border: none; /* Prevents any border from displaying */
+            border: none;
         }
 
         .divider::before,
@@ -267,7 +282,7 @@
             top: 50%;
             width: 45%;
             height: 1px;
-            background: transparent; /* Prevent any visible line */
+            background: transparent; 
         }
 
         .error-message {
@@ -311,7 +326,6 @@
         </div>
 
         <div class="forms-container">
-            <!-- Login Form -->
             <form class="form login-form active" onsubmit="return handleLogin(event)">
                 <div class="input-group">
                     <input type="email" id="login-email" placeholder=" " required>
@@ -331,16 +345,19 @@
 
                 <div class="social-login">
                     <button type="button" class="gmail-btn">
-                        <img src="gmail.png" alt="Gmail Logo" class="gmail-logo">
-                        Gmail
+                        <div class="gmail-logo">
+                            <svg class="gmail-icon" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z" fill="white"/>
+                            </svg>
+                        </div>
+                        <span class="gmail-text">Continue with Gmail</span>
                     </button>
-                </div>
-                <div class="divider">Don't have Account?
-                    <a href="#" onclick="switchTab('signup')">Sign Up</a>
+                    <div class="divider">Forgot password?
+                        <a href="forgot_password.html">Click here</a>
+                    </div>
                 </div>
             </form>
 
-            <!-- Signup Form -->
             <form class="form signup-form" onsubmit="return handleSignup(event)">
                 <div class="input-group">
                     <input type="text" id="signup-name" placeholder=" " required>
@@ -369,6 +386,10 @@
                 <button type="submit" class="btn">Create Account</button>
             </form>
         </div>
+
+        <div class="divider">Don't have an account?
+            <a href="#" onclick="switchTab('signup')">Sign Up</a>
+        </div>
     </div>
 
     <script>
@@ -384,15 +405,15 @@
                 slider.style.transform = 'translateX(0)';
                 loginForm.classList.add('active');
                 signupForm.classList.remove('active');
-                loginForm.style.display = 'block';  // Show login form
-                signupForm.style.display = 'none';  // Hide signup form
+                loginForm.style.display = 'block';
+                signupForm.style.display = 'none';
             } else {
                 tabs[1].classList.add('active');
                 slider.style.transform = 'translateX(100%)';
                 signupForm.classList.add('active');
                 loginForm.classList.remove('active');
-                signupForm.style.display = 'block';  // Show signup form
-                loginForm.style.display = 'none';  // Hide login form
+                signupForm.style.display = 'block';
+                loginForm.style.display = 'none';
             }
         }
 
@@ -400,10 +421,9 @@
             event.preventDefault();
             const email = document.getElementById('login-email');
             const password = document.getElementById('login-password');
-            
-            // Basic validation
+
             let isValid = true;
-            
+
             if (!email.value || !email.value.includes('@')) {
                 email.parentElement.classList.add('error');
                 isValid = false;
@@ -419,7 +439,6 @@
             }
 
             if (isValid) {
-                // Handle login logic here
                 console.log('Login:', { email: email.value, password: password.value });
             }
         }
@@ -430,7 +449,7 @@
             const email = document.getElementById('signup-email');
             const password = document.getElementById('signup-password');
             const confirm = document.getElementById('signup-confirm');
-            
+
             let isValid = true;
 
             if (!name.value) {
@@ -462,7 +481,6 @@
             }
 
             if (isValid) {
-                // Handle signup logic here
                 console.log('Signup:', {
                     name: name.value,
                     email: email.value,
@@ -471,7 +489,6 @@
             }
         }
 
-        // Add floating animation to the container
         gsap.to('.auth-container', {
             y: 10,
             duration: 2,
