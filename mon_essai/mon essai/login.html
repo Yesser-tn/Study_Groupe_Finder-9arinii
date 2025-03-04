@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9arrini - Login/Sign Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link rel="icon" href="logo.png">
+    <style>
+        :root {
+            --primary-color: #00BFA5;
+            --secondary-color: #4A90E2;
+            --gmail-red: #EA4335;
+            --gmail-dark-red: #D93025;
+            --gmail-light-red: #FF5145;
+            --background-color: #F5F7FA;
+            --text-color: #2C3E50;
+            --error-color: #FF5252;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            filter: blur(60px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .bg-circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 15%;
+            animation-delay: 0s;
+        }
+
+        .bg-circle:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            top: 50%;
+            right: 15%;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 30px); }
+        }
+
+        .auth-container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            position: relative;
+            border-bottom: 2px solid #eee;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            color: var(--text-color);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+        }
+
+        .tab-slider {
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 50%;
+            height: 2px;
+            background: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .forms-container {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .form {
+            position: absolute;
+            width: 100%;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            padding: 1rem 0;
+        }
+
+        .signup-form {
+            transform: translateX(100%);
+            opacity: 0;
+            display: none;
+        }
+
+        .form.active {
+            transform: translateX(0);
+            opacity: 1;
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 191, 165, 0.1);
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0 4px;
+        }
+
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: 0;
+            font-size: 0.85rem;
+            color: var(--primary-color);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary-color);
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 191, 165, 0.3);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .btn:active::after {
+            width: 400px;
+            height: 400px;
+        }
+
+        .social-login {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        /* Enhanced Gmail Button */
+        .gmail-btn {
+            width: 100%;
+            height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(to bottom, var(--gmail-light-red), var(--gmail-red));
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+            border: none;
+            box-shadow: 0 2px 8px rgba(234, 67, 53, 0.3);
+            opacity: 0;
+            transform: scale(0);
+            animation: fadeInScale 0.5s forwards;
+        }
+
+        .gmail-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(234, 67, 53, 0.4);
+            background: linear-gradient(to bottom, var(--gmail-light-red), var(--gmail-dark-red));
+        }
+
+        .gmail-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(234, 67, 53, 0.4);
+        }
+
+        .gmail-logo {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .gmail-text {
+            position: relative;
+            top: 1px;
+        }
+
+        .divider {
+            margin: 2rem 0;
+            text-align: center;
+            position: relative;
+            border: none;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: transparent; 
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .input-group.error input {
+            border-color: var(--error-color);
+        }
+
+        .input-group.error .error-message {
+            display: block;
+        }
+
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg">
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+    </div>
+
+    <div class="auth-container">
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('login')">Login</div>
+            <div class="tab" onclick="switchTab('signup')">Sign Up</div>
+            <div class="tab-slider"></div>
+        </div>
+
+        <div class="forms-container">
+            <form class="form login-form active" action="login.php" method="POST">
+                <div class="input-group">
+                    <input type="email" id="login-email" name="email" placeholder=" " required>
+                    <label for="login-email">Email</label>
+                    <div class="error-message"><?php if (isset($login_error)) echo $login_error; ?></div>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="login-password" name="password" placeholder=" " required>
+                    <label for="login-password">Password</label>
+                    <div class="error-message"><?php if (isset($login_error)) echo $login_error; ?></div>
+                </div>
+
+                <button type="submit" class="btn">Login</button>
+
+                <div class="divider">Or continue with</div>
+
+                <div class="social-login">
+                    <button type="button" class="gmail-btn">
+                        <div class="gmail-logo">
+                            <svg class="gmail-icon" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z" fill="white"/>
+                            </svg>
+                        </div>
+                        <span class="gmail-text">Continue with Gmail</span>
+                    </button>
+                    <div class="divider">Forgot password?
+                        <a href="forgot_password.html">Click here</a>
+                    </div>
+                </div>
+            </form>
+
+            <form class="form signup-form" action="signup.php" method="POST">
+                <div class="input-group">
+                    <input type="text" id="signup-name" name="full_name" placeholder=" " required>
+                    <label for="signup-name">Full Name</label>
+                    <div class="error-message"><?php if (isset($signup_error)) echo $signup_error; ?></div>
+                </div>
+
+                <div class="input-group">
+                    <input type="email" id="signup-email" name="email" placeholder=" " required>
+                    <label for="signup-email">Email</label>
+                    <div class="error-message"><?php if (isset($signup_error)) echo $signup_error; ?></div>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="signup-password" name="password" placeholder=" " required>
+                    <label for="signup-password">Password</label>
+                    <div class="error-message">Password must be at least 8 characters</div>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="signup-confirm" name="confirm_password" placeholder=" " required>
+                    <label for="signup-confirm">Confirm Password</label>
+                    <div class="error-message"><?php if (isset($signup_error)) echo $signup_error; ?></div>
+                </div>
+
+                <button type="submit" class="btn">Create Account</button>
+            </form>
+        </div>
+
+        <div class="divider">Don't have an account?
+            <a href="#" onclick="switchTab('signup')">Sign Up</a>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            const tabs = document.querySelectorAll('.tab');
+            const slider = document.querySelector('.tab-slider');
+            const loginForm = document.querySelector('.login-form');
+            const signupForm = document.querySelector('.signup-form');
+
+            tabs.forEach(t => t.classList.remove('active'));
+            if (tab === 'login') {
+                tabs[0].classList.add('active');
+                slider.style.transform = 'translateX(0)';
+                loginForm.classList.add('active');
+                signupForm.classList.remove('active');
+                loginForm.style.display = 'block';
+                signupForm.style.display = 'none';
+            } else {
+                tabs[1].classList.add('active');
+                slider.style.transform = 'translateX(100%)';
+                signupForm.classList.add('active');
+                loginForm.classList.remove('active');
+                signupForm.style.display = 'block';
+                loginForm.style.display = 'none';
+            }
+        }
+
+        gsap.to('.auth-container', {
+            y: 10,
+            duration: 2,
+            repeat: -1,
+            yoyo: true,
+            ease: 'power1.inOut'
+        });
+    </script>
+</body>
+</html>

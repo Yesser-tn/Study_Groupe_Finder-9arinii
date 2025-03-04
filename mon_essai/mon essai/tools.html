@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9arrini|قَرِّيني</title>
+    <link rel="icon" href="logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            height: 100vh;
+            display: grid;
+            grid-template-columns: minmax(300px, 35%) 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .tools-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .tool-header {
+            color: #00BFA5;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        /* Todo List Styles */
+        #todo-input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .todo-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        /* Timer Styles */
+        #timer-display {
+            font-size: 2.5em;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        /* Quiz Styles */
+        .quiz-question {
+            margin-bottom: 15px;
+        }
+
+        .quiz-options label {
+            display: block;
+            margin: 8px 0;
+            padding: 8px;
+            background: #f1f1f1;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Schedule Styles */
+        .schedule-item {
+            padding: 8px;
+            margin-bottom: 8px;
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        /* Chat Styles */
+        .chat-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .chat-header {
+            padding: 20px;
+            background: #00BFA5;
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+
+        .chat-input-container {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #chat-input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .file-label {
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        button {
+            background: #00BFA5;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #00a693;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            max-width: 80%;
+            position: relative;
+        }
+
+        .message.sent {
+            background: #00BFA5;
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .message.received {
+            background: #f1f1f1;
+            align-self: flex-start;
+        }
+
+        .timestamp {
+            display: block;
+            font-size: 0.75em;
+            margin-top: 5px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                height: auto;
+                overflow: visible;
+            }
+
+            .tools-container {
+                overflow: visible;
+            }
+            
+            .chat-container {
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Tools Section -->
+        <div class="tools-container">
+            <!-- Todo List -->
+            <div class="tool-card">
+                <div class="tool-header">Todo List</div>
+                <input type="text" id="todo-input" placeholder="Add new task...">
+                <div id="todo-list"></div>
+            </div>
+
+            <!-- Pomodoro Timer -->
+            <div class="tool-card">
+                <div class="tool-header">Pomodoro Timer</div>
+                <div id="timer-display">25:00</div>
+                <div class="timer-controls">
+                    <button id="start-timer">Start</button>
+                    <button id="reset-timer">Reset</button>
+                </div>
+            </div>
+
+            <!-- Quiz Tool -->
+            <div class="tool-card">
+                <div class="tool-header">Quick Quiz</div>
+                <button onclick="window.location.href='quiz.html'">Create Quiz</button>
+            </div>
+
+            <!-- Add Schedule Button -->
+            <div class="tool-card">
+                <div class="tool-header">Today's Schedule</div>
+                <button onclick="window.location.href='Schedule.html'">Add New Schedule</button>
+            </div>
+        </div>
+
+        <!-- Chat Interface -->
+          <!--
+        <div id="tlkio" data-channel="mate" style="width:100%;height:400px;"></div>
+    </div>
+    <script async src="https://tlk.io/mate" type="text/javascript"></script>
+    -->
+        <div class="chat-container">
+            <div class="chat-header">Chat Room</div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input-container">
+                <input type="file" id="file-input">
+                <label for="file-input" class="file-label">📎</label>
+                <input type="text" id="chat-input" placeholder="Type a message...">
+                <button id="send-btn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Todo List Functionality
+        const todoInput = document.getElementById('todo-input');
+        const todoList = document.getElementById('todo-list');
+
+        todoInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && this.value.trim()) {
+                addTodoItem(this.value);
+                this.value = '';
+            }
+        });
+
+        function addTodoItem(text) {
+            const div = document.createElement('div');
+            div.className = 'todo-item';
+            div.innerHTML = `
+                <input type="checkbox">
+                <span>${text}</span>
+            `;
+            
+            div.querySelector('input').addEventListener('change', function() {
+                div.querySelector('span').classList.toggle('completed');
+            });
+
+            todoList.appendChild(div);
+        }
+
+        // Pomodoro Timer Functionality
+        let timeLeft = 1500; // 25 minutes in seconds
+        let timerId = null;
+        const timerDisplay = document.getElementById('timer-display');
+        const startButton = document.getElementById('start-timer');
+        const resetButton = document.getElementById('reset-timer');
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        startButton.addEventListener('click', function() {
+            if (timerId === null) {
+                timerId = setInterval(() => {
+                    timeLeft--;
+                    updateTimer();
+                    if (timeLeft === 0) {
+                        clearInterval(timerId);
+                        timerId = null;
+                        alert('Time is up!');
+                    }
+                }, 1000);
+                this.textContent = 'Pause';
+            } else {
+                clearInterval(timerId);
+                timerId = null;
+                this.textContent = 'Start';
+            }
+        });
+
+        resetButton.addEventListener('click', function() {
+            clearInterval(timerId);
+            timerId = null;
+            timeLeft = 1500;
+            updateTimer();
+            startButton.textContent = 'Start';
+        });
+
+        // Chat Functionality
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
+        const sendButton = document.getElementById('send-btn');
+        const fileInput = document.getElementById('file-input');
+
+        function sendMessage(text, isFile = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message sent';
+            messageDiv.innerHTML = isFile ? `<a href="${text}" target="_blank">📎 File</a>` : text;
+            
+            const timestamp = document.createElement('span');
+            timestamp.className = 'timestamp';
+            timestamp.textContent = new Date().toLocaleTimeString();
+            messageDiv.appendChild(timestamp);
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        sendButton.addEventListener('click', () => {
+            const message = chatInput.value.trim();
+            if (message) {
+                sendMessage(message);
+                chatInput.value = '';
+            }
+        });
+
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && chatInput.value.trim()) {
+                sendMessage(chatInput.value);
+                chatInput.value = '';
+            }
+        });
+
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const fileURL = URL.createObjectURL(file);
+                sendMessage(fileURL, true);
+            }
+        });
+    </script>
+</body>
+</html>
