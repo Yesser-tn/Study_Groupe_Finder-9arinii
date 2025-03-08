@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>9arini - User Profile</title>
+  <link rel="stylesheet" href="profile-styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="icon_9arini.png">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="9arini_transparent.png" alt="9arini Logo" class="logo">
+        <h2>9arini</h2>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="dashboard.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-grid"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="room.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              <span>Study Rooms</span>
+            </a>
+          </li>
+          <li>
+            <a href="schedule.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              <span>Schedule</span>
+            </a>
+          </li>
+          <li>
+            <a href="quiz.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-help-circle"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <span>Quiz</span>
+            </a>
+          </li>
+          <li>
+            <a href="todo.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+              <span>Todo List</span>
+            </a>
+          </li>
+          <li class="active">
+            <a href="profile.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <span>Profile</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <a href="settings.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0 .33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span>Settings</span>
+        </a>
+        <a href="login.html" class="logout">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <button id="sidebar-toggle" class="sidebar-toggle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          <div class="logo-container">
+            <img src="images/logo.png" alt="9arini Logo" class="logo">
+          </div>
+        </div>
+        <div class="header-title">
+          <h1>User Profile</h1>
+        </div>
+        <div class="header-right">
+          <div class="user-profile">
+            <img src="images/profile.jpg" alt="User Profile" class="profile-img">
+            <div class="user-info">
+              <span class="user-name">John Doe</span>
+              <span class="user-role">Student</span>
+            </div>
+          </div>
+          <div class="header-actions">
+            <button class="notification-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              <span class="notification-badge">3</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div class="profile-content">
+        <!-- Cover Photo Section -->
+        <div class="profile-cover-container">
+          <div class="profile-cover" id="coverPhotoContainer">
+            <img src="images/default-cover.jpg" alt="Profile Cover" id="coverPhotoImg">
+            <button class="change-cover-btn" id="changeCoverBtn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-camera"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+              Change Cover
+            </button>
+            <input type="file" id="coverPhotoInput" accept="image/*" style="display: none;">
+          </div>
+          <div class="profile-avatar">
+            <img src="images/profile.jpg" alt="User Avatar" id="profileAvatarImg">
+            <button class="change-avatar-btn" id="changeAvatarBtn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-camera"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+            </button>
+            <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+          </div>
+        </div>
+
+        <!-- Profile Information -->
+        <div class="profile-info-container">
+          <div class="profile-header">
+            <h2 id="profileName">John Doe</h2>
+            <p class="user-status" id="profileStatus">Computer Science Student</p>
+            <div class="user-meta">
+              <span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <span id="profileLocation">New York, USA</span>
+              </span>
+              <span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                <span id="profileEmail">john.doe@example.com</span>
+              </span>
+            </div>
+          </div>
+          
+          <div class="profile-actions">
+            <button class="edit-profile-btn" id="editProfileBtn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+              Edit Profile
+            </button>
+          </div>
+        </div>
+
+        <!-- Profile Content -->
+        <div class="profile-main-content">
+          <div class="profile-card">
+            <h3>About Me</h3>
+            <p id="profileBio">Computer Science student passionate about web development and AI. I enjoy collaborating on projects and solving complex problems. Looking to connect with fellow students for study sessions and project collaborations.</p>
+          </div>
+          
+          <div class="profile-card">
+            <h3>Education</h3>
+            <div class="education-item">
+              <div class="education-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-book"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              </div>
+              <div class="education-details">
+                <h4 id="profileDegree">Bachelor of Science in Computer Science</h4>
+                <p id="profileSchool">New York University</p>
+                <span class="education-date" id="profileEducationDate">2022 - Present</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="profile-card">
+            <h3>Skills</h3>
+            <div class="skills-container">
+              <span class="skill-tag">Python</span>
+              <span class="skill-tag">JavaScript</span>
+              <span class="skill-tag">HTML/CSS</span>
+              <span class="skill-tag">React</span>
+              <span class="skill-tag">Node.js</span>
+              <span class="skill-tag">SQL</span>
+              <span class="skill-tag">Git</span>
+              <span class="skill-tag">Algorithms</span>
+              <span class="skill-tag">Data Structures</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Edit Profile Modal -->
+  <div class="modal" id="editProfileModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Profile</h2>
+        <button class="close-modal" id="closeModalBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <form id="editProfileForm">
+        <div class="form-group">
+          <label for="editName">Full Name</label>
+          <input type="text" id="editName" name="name" value="John Doe">
+        </div>
+        <div class="form-group">
+          <label for="editStatus">Status</label>
+          <input type="text" id="editStatus" name="status" value="Computer Science Student">
+        </div>
+        <div class="form-group">
+          <label for="editLocation">Location</label>
+          <input type="text" id="editLocation" name="location" value="New York, USA">
+        </div>
+        <div class="form-group">
+          <label for="editEmail">Email</label>
+          <input type="email" id="editEmail" name="email" value="john.doe@example.com">
+        </div>
+        <div class="form-group">
+          <label for="editBio">Bio</label>
+          <textarea id="editBio" name="bio" rows="4">Computer Science student passionate about web development and AI. I enjoy collaborating on projects and solving complex problems. Looking to connect with fellow students for study sessions and project collaborations.</textarea>
+        </div>
+        <div class="form-group">
+          <label for="editDegree">Degree</label>
+          <input type="text" id="editDegree" name="degree" value="Bachelor of Science in Computer Science">
+        </div>
+        <div class="form-group">
+          <label for="editSchool">School</label>
+          <input type="text" id="editSchool" name="school" value="New York University">
+        </div>
+        <div class="form-group">
+          <label for="editEducationDate">Education Period</label>
+          <input type="text" id="editEducationDate" name="educationDate" value="2022 - Present">
+        </div>
+        <div class="form-actions">
+          <button type="button" class="cancel-btn" id="cancelEditBtn">Cancel</button>
+          <button type="submit" class="save-btn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="profile.js"></script>
+  <script src="fix-navigation.js"></script>
+</body>
+</html>
+

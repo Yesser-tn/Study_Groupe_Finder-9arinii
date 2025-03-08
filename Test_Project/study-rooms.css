@@ -1,0 +1,199 @@
+/* Additional styles for study rooms */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 500px;
+  max-height: 80vh; /* Limit height to 80% of viewport height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Make the modal header sticky at the top */
+.modal-header {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 10;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Make the form actions sticky at the bottom */
+.form-actions {
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  padding-top: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+/* Reduce the size of form elements */
+.form-group {
+  margin-bottom: 0.75rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  font-size: 0.9rem;
+  height: 2.25rem;
+}
+
+.form-group textarea {
+  height: 5rem;
+  resize: vertical;
+}
+
+/* Style for buttons */
+.cancel-btn,
+.save-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.save-btn {
+  background-color: lightseagreen;
+  color: white;
+}
+.cancel-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.save-btn:hover {
+  background-color: var(--primary-dark);
+}
+
+/* Room card enhancements */
+.room-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.room-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: var(--primary-color);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.room-card:hover::before {
+  opacity: 1;
+}
+
+.join-room-btn {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.join-room-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.2);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.join-room-btn:hover::before {
+  left: 0;
+}
+
+/* Room list empty state */
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+}
+
+.empty-state svg {
+  width: 64px;
+  height: 64px;
+  color: var(--text-light);
+  margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  color: var(--text-light);
+  margin-bottom: 1.5rem;
+}
+
+.create-first-room-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.create-first-room-btn:hover {
+  background-color: var(--primary-dark);
+}
+
