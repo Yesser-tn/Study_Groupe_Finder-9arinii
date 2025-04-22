@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Manager-9arrini</title>
+    <link rel="icon" href="logo.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+</head>
+<body>
+    <div class="container">
+        
+        <div class="tool-card">
+            <div class="calendar-controls">
+                <div class="month-navigation">
+                    <button id="prev-month" class="nav-btn">&lt;</button>
+                    <h2 id="current-month">April 2025</h2>
+                    <button id="next-month" class="nav-btn">&gt;</button>
+                </div>
+                <button id="add-task-btn" class="primary-btn">Add New Task</button>
+            </div>
+            
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                <div id="calendar-grid" class="calendar-grid">
+                    <!-- Calendar days will be generated here -->
+                </div>
+            </div>
+
+            <div class="events-section">
+                <h3 id="selected-date-events">Events for <span id="selected-date">April 12, 2025</span></h3>
+                <div id="events-list" class="events-list">
+                    <!-- Events will be displayed here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Task Creation Modal -->
+        <div id="task-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Add New Task</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="task-name">Task Name:</label>
+                        <input type="text" id="task-name" placeholder="Enter task name">
+                    </div>
+                    <div class="form-group">
+                        <label for="task-date">Date:</label>
+                        <input type="date" id="task-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="task-time">Time:</label>
+                        <input type="time" id="task-time">
+                    </div>
+                    <div class="form-group">
+                        <label for="task-duration">Duration (minutes):</label>
+                        <input type="number" id="task-duration" min="5" step="5" value="30">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="save-task-btn" class="primary-btn">Save Task</button>
+                    <button id="cancel-task-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="background-circles">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            <div class="circle circle-3"></div>
+        </div>
+    </div>
+
+    <style>
+        :root {
+            --primary-color: #00BFA5;
+            --primary-light: rgba(0, 191, 165, 0.1);
+            --text-color: #4a5568;
+            --light-gray: #f7fafc;
+            --border-color: #e2e8f0;
+            --header-color: #2d3748;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-color);
+            background-color: #ffffff;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .title {
+            font-size: 3rem;
+            color: var(--header-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .dot {
+            color: var(--primary-color);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .calendar-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .month-navigation {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary-color);
+        }
+
+        #current-month {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--header-color);
+        }
+
+        .calendar-container {
+            margin-bottom: 2rem;
+        }
+
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: 600;
+            color: var(--header-color);
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-top: 0.5rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .calendar-day:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary-color);
+        }
+
+        .day-number {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .other-month {
+            opacity: 0.4;
+        }
+
+        .today {
+            background-color: var(--primary-light);
+            border-color: var(--primary-color);
+        }
+
+        .selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .has-events::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 6px;
+            height: 6px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+        }
+
+        .selected .has-events::after {
+            background-color: white;
+        }
+
+        .events-section {
+            margin-top: 2rem;
+        }
+
+        #selected-date-events {
+            margin-bottom: 1rem;
+            color: var(--header-color);
+        }
+
+        .events-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .event-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: var(--light-gray);
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .event-item:hover {
+            background: #eeeeee;
+        }
+
+        .event-info {
+            flex-grow: 1;
+        }
+
+        .event-time {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--header-color);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .primary-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            font-weight: 500;
+        }
+
+        .primary-btn:hover {
+            opacity: 0.9;
+        }
+
+        button {
+            padding: 0.75rem 1.25rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            background-color: white;
+        }
+
+        button:hover {
+            background-color: var(--light-gray);
+        }
+
+        .delete-btn {
+            background-color: #ff5252;
+            color: white;
+            border: none;
+        }
+
+        .delete-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Background circles */
+        .background-circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(0, 191, 165, 0.1);
+        }
+
+        .circle-1 {
+            width: 600px;
+            height: 600px;
+            top: -200px;
+            right: -200px;
+        }
+
+        .circle-2 {
+            width: 500px;
+            height: 500px;
+            bottom: -100px;
+            left: -150px;
+        }
+
+        .circle-3 {
+            width: 300px;
+            height: 300px;
+            top: 40%;
+            right: 10%;
+        }
+
+        /* Footer */
+        .main-footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: var(--text-color);
+        }
+
+        .github-link {
+            margin-top: 1rem;
+        }
+
+        .github-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--header-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: opacity 0.2s;
+        }
+
+        .github-button:hover {
+            opacity: 0.9;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .calendar-controls {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .title {
+                font-size: 2.5rem;
+            }
+
+            .calendar-day {
+                padding: 0.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .title {
+                font-size: 2rem;
+            }
+
+            .calendar-header, .calendar-grid {
+                font-size: 0.9rem;
+            }
+        }
+
+        .day-events {
+            margin-top: 0.25rem;
+            font-size: 0.7rem;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+        .day-event {
+            background-color: var(--primary-light);
+            border-left: 2px solid var(--primary-color);
+            padding: 2px 4px;
+            margin-bottom: 2px;
+            border-radius: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .selected .day-event {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-left-color: white;
+        }
+    </style>
+
+    <script>
+        // Schedule State
+        let scheduleItems = [];
+        let currentDate = new Date();
+        let selectedDate = new Date();
+
+        // DOM Elements
+        const taskModal = document.getElementById('task-modal');
+        const calendarGrid = document.getElementById('calendar-grid');
+        const eventsList = document.getElementById('events-list');
+        const currentMonthElement = document.getElementById('current-month');
+        const selectedDateElement = document.getElementById('selected-date');
+
+        // Initialize Event Listeners
+        document.getElementById('add-task-btn').addEventListener('click', showTaskModal);
+        document.getElementById('save-task-btn').addEventListener('click', saveTask);
+        document.getElementById('cancel-task-btn').addEventListener('click', hideTaskModal);
+        document.querySelector('.close-btn').addEventListener('click', hideTaskModal);
+        document.getElementById('prev-month').addEventListener('click', () => changeMonth(-1));
+        document.getElementById('next-month').addEventListener('click', () => changeMonth(1));
+
+        // Helper function to format dates consistently as YYYY-MM-DD
+        function formatDateToYYYYMMDD(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Initialize calendar
+        updateCalendar();
+        updateSelectedDateDisplay();
+
+        // Show/Hide Modal Functions
+        function showTaskModal() {
+            taskModal.classList.remove('hidden');
+            document.getElementById('task-date').valueAsDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+            document.getElementById('task-time').value = '09:00';
+        }
+
+        function hideTaskModal() {
+            taskModal.classList.add('hidden');
+            clearTaskForm();
+        }
+
+        // Clear Form Function
+        function clearTaskForm() {
+            document.getElementById('task-name').value = '';
+            document.getElementById('task-date').value = '';
+            document.getElementById('task-time').value = '';
+            document.getElementById('task-duration').value = '30';
+        }
+
+        // Save Task Function
+        function saveTask() {
+            const taskName = document.getElementById('task-name').value.trim();
+            const taskDate = document.getElementById('task-date').value;
+            const taskTime = document.getElementById('task-time').value;
+            const taskDuration = document.getElementById('task-duration').value;
+
+            if (!taskName || !taskDate || !taskTime || !taskDuration) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const newTask = {
+                id: Date.now(),
+                name: taskName,
+                date: taskDate,
+                time: taskTime,
+                duration: parseInt(taskDuration)
+            };
+
+            scheduleItems.push(newTask);
+            scheduleItems.sort((a, b) => {
+                const dateA = new Date(`${a.date} ${a.time}`);
+                const dateB = new Date(`${b.date} ${b.time}`);
+                return dateA - dateB;
+            });
+
+            hideTaskModal();
+            updateCalendar();
+            updateEventsList();
+        }
+
+        // Delete Task Function
+        function deleteTask(taskId) {
+            if (confirm('Are you sure you want to delete this task?')) {
+                scheduleItems = scheduleItems.filter(item => item.id !== taskId);
+                updateCalendar();
+                updateEventsList();
+            }
+        }
+
+        // Format Time Function
+        function formatTime(timeString) {
+            return new Date(`2000-01-01 ${timeString}`).toLocaleTimeString([], { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+        }
+
+        // Format Date Function
+        function formatDate(date) {
+            return date.toLocaleDateString('en-US', { 
+                month: 'long', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+        }
+
+        // Update Calendar
+        function updateCalendar() {
+            calendarGrid.innerHTML = '';
+            
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            // Update month display
+            currentMonthElement.textContent = new Date(year, month, 1).toLocaleDateString('en-US', { 
+                month: 'long', 
+                year: 'numeric' 
+            });
+            
+            // Get first day of month and last day of month
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            
+            // Get day of week of first day (0 = Sunday, 6 = Saturday)
+            const firstDayOfWeek = firstDay.getDay();
+            
+            // Get days from previous month to display
+            const daysFromPrevMonth = firstDayOfWeek;
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
+            
+            // Generate days for previous month
+            for (let i = 0; i < daysFromPrevMonth; i++) {
+                const dayNumber = prevMonthLastDay - daysFromPrevMonth + i + 1;
+                const dayDate = new Date(year, month - 1, dayNumber);
+                const dayElement = createDayElement(dayDate, true);
+                calendarGrid.appendChild(dayElement);
+            }
+            
+            // Generate days for current month
+            for (let i = 1; i <= lastDay.getDate(); i++) {
+                const dayDate = new Date(year, month, i);
+                const dayElement = createDayElement(dayDate, false);
+                calendarGrid.appendChild(dayElement);
+            }
+            
+            // Calculate how many days we need from next month
+            const totalDaysDisplayed = daysFromPrevMonth + lastDay.getDate();
+            const daysFromNextMonth = 42 - totalDaysDisplayed; // 6 rows of 7 days = 42
+            
+            // Generate days for next month
+            for (let i = 1; i <= daysFromNextMonth; i++) {
+                const dayDate = new Date(year, month + 1, i);
+                const dayElement = createDayElement(dayDate, true);
+                calendarGrid.appendChild(dayElement);
+            }
+            
+            // Update events list for the selected date
+            updateEventsList();
+        }
+
+        // Create Day Element
+        function createDayElement(date, isOtherMonth) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day';
+            if (isOtherMonth) {
+                dayElement.classList.add('other-month');
+            }
+            
+            // Check if it's today
+            const today = new Date();
+            if (date.getDate() === today.getDate() && 
+                date.getMonth() === today.getMonth() && 
+                date.getFullYear() === today.getFullYear()) {
+                dayElement.classList.add('today');
+            }
+            
+            // Check if it's selected date
+            if (date.getDate() === selectedDate.getDate() && 
+                date.getMonth() === selectedDate.getMonth() && 
+                date.getFullYear() === selectedDate.getFullYear()) {
+                dayElement.classList.add('selected');
+            }
+            
+            // Add day number
+            const dayNumber = document.createElement('div');
+            dayNumber.className = 'day-number';
+            dayNumber.textContent = date.getDate();
+            dayElement.appendChild(dayNumber);
+            
+            // Check if day has events and add them
+            const dateString = formatDateToYYYYMMDD(date);
+            const dayEvents = scheduleItems.filter(item => item.date === dateString);
+            
+            if (dayEvents.length > 0) {
+                dayElement.classList.add('has-events');
+                
+                // Add event previews
+                const eventsContainer = document.createElement('div');
+                eventsContainer.className = 'day-events';
+                
+                // Limit to 3 events per day in the preview
+                const displayEvents = dayEvents.slice(0, 3);
+                displayEvents.forEach(event => {
+                    const eventElement = document.createElement('div');
+                    eventElement.className = 'day-event';
+                    eventElement.textContent = `${formatTime(event.time)} ${event.name}`;
+                    eventsContainer.appendChild(eventElement);
+                });
+                
+                // If there are more events than we're showing
+                if (dayEvents.length > 3) {
+                    const moreElement = document.createElement('div');
+                    moreElement.className = 'day-event';
+                    moreElement.textContent = `+ ${dayEvents.length - 3} more`;
+                    eventsContainer.appendChild(moreElement);
+                }
+                
+                dayElement.appendChild(eventsContainer);
+            }
+            
+            // Add click event
+            dayElement.addEventListener('click', () => {
+                // Remove selected class from all days
+                document.querySelectorAll('.calendar-day').forEach(day => {
+                    day.classList.remove('selected');
+                });
+                
+                // Add selected class to clicked day
+                dayElement.classList.add('selected');
+                
+                // Update selected date
+                selectedDate = new Date(date);
+                updateSelectedDateDisplay();
+                updateEventsList();
+            });
+            
+            return dayElement;
+        }
+
+        // Change Month
+        function changeMonth(delta) {
+            currentDate.setMonth(currentDate.getMonth() + delta);
+            updateCalendar();
+        }
+
+        // Update Selected Date Display
+        function updateSelectedDateDisplay() {
+            selectedDateElement.textContent = formatDate(selectedDate);
+        }
+
+        // Update Events List
+        function updateEventsList() {
+            const dateString = formatDateToYYYYMMDD(selectedDate);
+            const filteredItems = scheduleItems.filter(item => item.date === dateString);
+            
+            if (filteredItems.length === 0) {
+                eventsList.innerHTML = '<p class="no-events">No events scheduled for this date</p>';
+                return;
+            }
+
+            eventsList.innerHTML = filteredItems.map(item => `
+                <div class="event-item">
+                    <div class="event-info">
+                        <div class="event-time">${formatTime(item.time)}</div>
+                        <div class="event-name">${item.name}</div>
+                        <div class="event-duration">Duration: ${item.duration} minutes</div>
+                    </div>
+                    <div class="event-actions">
+                        <button onclick="deleteTask(${item.id})" class="delete-btn">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
